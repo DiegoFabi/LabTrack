@@ -7,15 +7,18 @@
 <div class="card shadow-sm" style="max-width: 720px;">
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-4">Estudiante</dt><dd class="col-sm-8">@r.Usuario!.NombreCompleto (@r.Usuario.Codigo)</dd>
-            <dt class="col-sm-4">Equipo</dt><dd class="col-sm-8">@r.Equipo!.CodigoInventario - @r.Equipo.Nombre</dd>
-            <dt class="col-sm-4">Fecha/Hora</dt><dd class="col-sm-8">@r.Inicio.ToString("dd/MM/yyyy HH:mm") - @r.Fin.ToString("HH:mm")</dd>
+            <dt class="col-sm-4">Estudiante</dt>
+            <dd class="col-sm-8">@r.Usuario!.NombreCompleto (@r.Usuario.Codigo)</dd>
+            <dt class="col-sm-4">Equipo</dt>
+            <dd class="col-sm-8">@r.Equipo!.CodigoInventario - @r.Equipo.Nombre</dd>
+            <dt class="col-sm-4">Fecha/Hora</dt>
+            <dd class="col-sm-8">@r.Inicio.ToString("dd/MM/yyyy HH:mm") - @r.Fin.ToString("HH:mm")</dd>
         </dl>
         <form asp-action="Rechazar" method="post" id="form-rechazo">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
             <input type="hidden" asp-for="ReservaId" />
             <div class="mb-3">
-                <label asp-for="Motivo" class="form-label"></label>
+                <label for="motivo" class="form-label">@Html.DisplayNameFor(m => m.Motivo)</label>
                 <textarea asp-for="Motivo" class="form-control" rows="3" id="motivo"
                           placeholder="Ej. Equipo en mantenimiento"></textarea>
                 <span asp-validation-for="Motivo" class="text-danger small" id="error-motivo"></span>

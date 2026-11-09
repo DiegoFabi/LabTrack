@@ -22,12 +22,12 @@
             <form asp-action="Login" method="post" id="form-login" novalidate>
                 <input type="hidden" asp-for="ReturnUrl" />
                 <div class="mb-3">
-                    <label asp-for="Codigo" class="form-label"></label>
-                    <input asp-for="Codigo" id="codigo" class="form-control" placeholder="Ej. N00012345" autocomplete="username" autofocus />
+                    <label for="codigo" class="form-label">@Html.DisplayNameFor(m => m.Codigo)</label>
+                    <input asp-for="Codigo" id="codigo" class="form-control" placeholder="Ej. N00012345" autocomplete="username" />
                     <span asp-validation-for="Codigo" class="text-danger small"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Password" class="form-label"></label>
+                    <label for="password" class="form-label">@Html.DisplayNameFor(m => m.Password)</label>
                     <input asp-for="Password" id="password" class="form-control" autocomplete="current-password" />
                     <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>

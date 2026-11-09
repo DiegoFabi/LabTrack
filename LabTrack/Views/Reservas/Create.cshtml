@@ -16,7 +16,7 @@
 
         <form asp-action="Create" method="post" id="form-reserva">
             <div class="mb-3">
-                <label asp-for="EquipoId" class="form-label"></label>
+                <label for="equipo" class="form-label">@Html.DisplayNameFor(m => m.EquipoId)</label>
                 <select asp-for="EquipoId" asp-items="equipos" class="form-select" id="equipo">
                     <option value="0">-- Seleccione un equipo disponible --</option>
                 </select>
@@ -24,17 +24,17 @@
             </div>
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label asp-for="Fecha" class="form-label"></label>
+                    <label for="fecha" class="form-label">@Html.DisplayNameFor(m => m.Fecha)</label>
                     <input asp-for="Fecha" class="form-control" id="fecha" asp-format="{0:yyyy-MM-dd}" />
                     <span asp-validation-for="Fecha" class="text-danger small"></span>
                 </div>
                 <div class="col-md-4">
-                    <label asp-for="HoraInicio" class="form-label"></label>
+                    <label for="hora-inicio" class="form-label">@Html.DisplayNameFor(m => m.HoraInicio)</label>
                     <input asp-for="HoraInicio" type="time" class="form-control" id="hora-inicio" asp-format="{0:hh\:mm}" />
                     <span asp-validation-for="HoraInicio" class="text-danger small"></span>
                 </div>
                 <div class="col-md-4">
-                    <label asp-for="HoraFin" class="form-label"></label>
+                    <label for="hora-fin" class="form-label">@Html.DisplayNameFor(m => m.HoraFin)</label>
                     <input asp-for="HoraFin" type="time" class="form-control" id="hora-fin" asp-format="{0:hh\:mm}" />
                     <span asp-validation-for="HoraFin" class="text-danger small"></span>
                 </div>
