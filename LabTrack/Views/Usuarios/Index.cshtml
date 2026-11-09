@@ -11,10 +11,12 @@
 
 <form method="get" class="row g-2 mb-3">
     <div class="col-sm-6 col-md-4">
-        <input type="search" name="busqueda" value="@ViewBag.Busqueda" class="form-control" placeholder="Buscar por código o nombre" />
+        <label for="busqueda-usuario" class="visually-hidden">Buscar usuario por código o nombre</label>
+        <input type="search" name="busqueda" value="@ViewBag.Busqueda" class="form-control" id="busqueda-usuario" placeholder="Buscar por código o nombre" />
     </div>
     <div class="col-sm-4 col-md-3">
-        <select name="rol" class="form-select">
+        <label for="filtro-rol" class="visually-hidden">Filtrar por rol</label>
+        <select name="rol" class="form-select" id="filtro-rol">
             <option value="">Todos los roles</option>
             @foreach (var r in Enum.GetValues<RolUsuario>())
             {

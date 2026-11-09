@@ -7,10 +7,12 @@
 
 <form method="get" class="row g-2 mb-3">
     <div class="col-sm-6 col-md-4">
-        <input type="search" name="busqueda" value="@ViewBag.Busqueda" class="form-control" placeholder="Estudiante o equipo" />
+        <label for="busqueda-historial" class="visually-hidden">Buscar por estudiante o equipo</label>
+        <input type="search" name="busqueda" value="@ViewBag.Busqueda" class="form-control" id="busqueda-historial" placeholder="Estudiante o equipo" />
     </div>
     <div class="col-sm-4 col-md-3">
-        <select name="estado" class="form-select">
+        <label for="filtro-estado" class="visually-hidden">Filtrar por estado</label>
+        <select name="estado" class="form-select" id="filtro-estado">
             <option value="">Todos los estados</option>
             @foreach (var e in Enum.GetValues<EstadoReserva>())
             {
