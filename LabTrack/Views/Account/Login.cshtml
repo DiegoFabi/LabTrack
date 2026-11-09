@@ -1,0 +1,42 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+<div class="login-wrapper">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <h1 class="h4 text-center mb-1">LabTrack</h1>
+            <p class="text-center text-muted mb-4">Sistema de Gestión de Laboratorios</p>
+
+            @if (ViewBag.AlertaSeguridad is string alerta)
+            {
+                <div id="alerta-seguridad" class="alert alert-warning" role="alert">
+                    <strong>&#9888;</strong> @alerta
+                </div>
+            }
+            @if (ViewBag.Error is string error)
+            {
+                <div id="mensaje-error" class="alert alert-danger" role="alert">@error</div>
+            }
+
+            <form asp-action="Login" method="post" id="form-login" novalidate>
+                <input type="hidden" asp-for="ReturnUrl" />
+                <div class="mb-3">
+                    <label asp-for="Codigo" class="form-label"></label>
+                    <input asp-for="Codigo" id="codigo" class="form-control" placeholder="Ej. N00012345" autocomplete="username" autofocus />
+                    <span asp-validation-for="Codigo" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" id="password" class="form-control" autocomplete="current-password" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+                <button type="submit" id="btn-login" class="btn btn-primary w-100">Ingresar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

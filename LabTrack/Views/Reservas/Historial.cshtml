@@ -1,0 +1,62 @@
+@model IEnumerable<Reserva>
+@{
+    ViewData["Title"] = "Historial de reservas";
+    var estadoSel = ViewBag.Estado as EstadoReserva?;
+}
+<h1 class="h3 mb-3">Historial de reservas</h1>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-sm-6 col-md-4">
+        <input type="search" name="busqueda" value="@ViewBag.Busqueda" class="form-control" placeholder="Estudiante o equipo" />
+    </div>
+    <div class="col-sm-4 col-md-3">
+        <select name="estado" class="form-select">
+            <option value="">Todos los estados</option>
+            @foreach (var e in Enum.GetValues<EstadoReserva>())
+            {
+                <option value="@e" selected="@(estadoSel == e)">@e</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto"><button class="btn btn-outline-secondary" type="submit">Filtrar</button></div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No se encontraron reservas.</div>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="tabla-historial">
+                <thead class="table-light">
+                    <tr><th>#</th><th>Estudiante</th><th>Equipo</th><th>Fecha/Hora</th><th>Estado</th><th>Observación</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr>
+                            <td>@r.Id</td>
+                            <td>@r.Usuario!.NombreCompleto</td>
+                            <td>@r.Equipo!.Nombre</td>
+                            <td>@r.Inicio.ToString("dd/MM/yyyy HH:mm") - @r.Fin.ToString("HH:mm")</td>
+                            <td><partial name="_EstadoReserva" model="r.Estado" /></td>
+                            <td class="small">
+                                @if (!string.IsNullOrEmpty(r.MotivoRechazo))
+                                {
+                                    @r.MotivoRechazo
+                                }
+                                else if (r.DevueltaConRetraso)
+                                {
+                                    <span class="text-danger">Devuelto con retraso</span>
+                                }
+                            </td>
+                            <td class="text-end"><a asp-action="Details" asp-route-id="@r.Id" class="btn btn-sm btn-outline-secondary">Ver</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

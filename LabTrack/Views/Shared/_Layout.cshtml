@@ -1,0 +1,91 @@
+@{
+    var esEncargado = User.IsInRole(nameof(RolUsuario.Encargado));
+    var esEstudiante = User.IsInRole(nameof(RolUsuario.Estudiante));
+    var autenticado = User.Identity?.IsAuthenticated == true;
+    var controlador = ViewContext.RouteData.Values["controller"]?.ToString();
+    var accion = ViewContext.RouteData.Values["action"]?.ToString();
+    string Activo(string c, string? a = null) => controlador == c && (a == null || accion == a) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LabTrack</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-labtrack shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <span class="brand-icon">&#9878;</span> LabTrack
+                </a>
+                @if (autenticado)
+                {
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                            aria-controls="menuPrincipal" aria-expanded="false" aria-label="Mostrar menú">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="menuPrincipal">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item"><a id="nav-panel" class="nav-link @Activo("Home")" asp-controller="Home" asp-action="Index">Panel</a></li>
+                            <li class="nav-item"><a id="nav-catalogo" class="nav-link @Activo("Equipos")" asp-controller="Equipos" asp-action="Index">@(esEncargado ? "Equipos" : "Catálogo")</a></li>
+                            @if (esEstudiante)
+                            {
+                                <li class="nav-item"><a id="nav-nueva-reserva" class="nav-link @Activo("Reservas", "Create")" asp-controller="Reservas" asp-action="Create">Nueva reserva</a></li>
+                                <li class="nav-item"><a id="nav-mis-reservas" class="nav-link @Activo("Reservas", "Index")" asp-controller="Reservas" asp-action="Index">Mis reservas</a></li>
+                            }
+                            @if (esEncargado)
+                            {
+                                <li class="nav-item"><a id="nav-pendientes" class="nav-link @Activo("Reservas", "Pendientes")" asp-controller="Reservas" asp-action="Pendientes">Solicitudes</a></li>
+                                <li class="nav-item"><a id="nav-activas" class="nav-link @Activo("Reservas", "Activas")" asp-controller="Reservas" asp-action="Activas">Devoluciones</a></li>
+                                <li class="nav-item"><a id="nav-historial" class="nav-link @Activo("Reservas", "Historial")" asp-controller="Reservas" asp-action="Historial">Historial</a></li>
+                                <li class="nav-item"><a id="nav-categorias" class="nav-link @Activo("Categorias")" asp-controller="Categorias" asp-action="Index">Categorías</a></li>
+                                <li class="nav-item"><a id="nav-usuarios" class="nav-link @Activo("Usuarios")" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
+                            }
+                        </ul>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="navbar-text text-white small" id="usuario-actual">
+                                @User.Identity!.Name <span class="badge bg-light text-dark ms-1">@(esEncargado ? "Encargado" : "Estudiante")</span>
+                            </span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <button id="btn-logout" type="submit" class="btn btn-sm btn-outline-light">Cerrar sesión</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container py-4 flex-grow-1">
+        @if (TempData["Exito"] is string exito)
+        {
+            <div id="mensaje-exito" class="alert alert-success alert-dismissible fade show" role="alert">
+                @exito
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+        @if (TempData["Error"] is string error)
+        {
+            <div id="mensaje-error-global" class="alert alert-danger alert-dismissible fade show" role="alert">
+                @error
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="border-top footer text-muted py-3 bg-white">
+        <div class="container small">
+            &copy; @DateTime.Now.Year - LabTrack · Sistema de Gestión de Laboratorios
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

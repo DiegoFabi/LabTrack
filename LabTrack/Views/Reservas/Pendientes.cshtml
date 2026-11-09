@@ -1,0 +1,39 @@
+@model IEnumerable<Reserva>
+@{
+    ViewData["Title"] = "Solicitudes pendientes";
+}
+<h1 class="h3 mb-3">Solicitudes de reserva pendientes</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info" id="mensaje-sin-pendientes">No hay solicitudes pendientes.</div>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="tabla-pendientes">
+                <thead class="table-light">
+                    <tr><th>Nombre del estudiante</th><th>Equipo</th><th>Fecha/Hora solicitada</th><th>Solicitado el</th><th class="text-end">Acciones</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr data-reserva-id="@r.Id">
+                            <td>@r.Usuario!.NombreCompleto<div class="small text-muted">@r.Usuario.Codigo</div></td>
+                            <td>@r.Equipo!.Nombre<div class="small text-muted">@r.Equipo.CodigoInventario</div></td>
+                            <td>@r.Inicio.ToString("dd/MM/yyyy") <span class="text-nowrap">@r.Inicio.ToString("HH:mm") - @r.Fin.ToString("HH:mm")</span></td>
+                            <td class="small">@r.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-end text-nowrap">
+                                <form asp-action="Aprobar" asp-route-id="@r.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-success btn-aprobar">Aprobar</button>
+                                </form>
+                                <a asp-action="Rechazar" asp-route-id="@r.Id" class="btn btn-sm btn-danger btn-rechazar">Rechazar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

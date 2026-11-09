@@ -1,0 +1,27 @@
+@model Equipo
+@{
+    ViewData["Title"] = Model.Nombre;
+}
+<h1 class="h3 mb-3">@Model.Nombre</h1>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Código de inventario</dt><dd class="col-sm-9">@Model.CodigoInventario</dd>
+            <dt class="col-sm-3">Categoría</dt><dd class="col-sm-9">@Model.Categoria?.Nombre</dd>
+            <dt class="col-sm-3">Estado</dt><dd class="col-sm-9"><partial name="_EstadoEquipo" model="Model.Estado" /></dd>
+            <dt class="col-sm-3">Ubicación</dt><dd class="col-sm-9">@(Model.Ubicacion ?? "-")</dd>
+            <dt class="col-sm-3">Descripción</dt><dd class="col-sm-9">@(Model.Descripcion ?? "-")</dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        @if (User.IsInRole(nameof(RolUsuario.Estudiante)) && Model.Estado == EstadoEquipo.Disponible)
+        {
+            <a asp-controller="Reservas" asp-action="Create" asp-route-equipoId="@Model.Id" class="btn btn-primary">Reservar</a>
+        }
+        @if (User.IsInRole(nameof(RolUsuario.Encargado)))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Editar</a>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+    </div>
+</div>

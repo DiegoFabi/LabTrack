@@ -1,0 +1,48 @@
+@model Reserva
+@{
+    ViewData["Title"] = $"Reserva #{Model.Id}";
+    var esEncargado = User.IsInRole(nameof(RolUsuario.Encargado));
+}
+<h1 class="h3 mb-3">Reserva #@Model.Id</h1>
+<div class="card shadow-sm" style="max-width: 760px;">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Estudiante</dt><dd class="col-sm-8">@Model.Usuario!.NombreCompleto (@Model.Usuario.Codigo)</dd>
+            <dt class="col-sm-4">Equipo</dt><dd class="col-sm-8">@Model.Equipo!.CodigoInventario - @Model.Equipo.Nombre</dd>
+            <dt class="col-sm-4">Categoría</dt><dd class="col-sm-8">@Model.Equipo.Categoria?.Nombre</dd>
+            <dt class="col-sm-4">Fecha</dt><dd class="col-sm-8">@Model.Inicio.ToString("dd/MM/yyyy")</dd>
+            <dt class="col-sm-4">Horario</dt><dd class="col-sm-8">@Model.Inicio.ToString("HH:mm") - @Model.Fin.ToString("HH:mm")</dd>
+            <dt class="col-sm-4">Estado</dt><dd class="col-sm-8"><partial name="_EstadoReserva" model="Model.Estado" /></dd>
+            <dt class="col-sm-4">Solicitada el</dt><dd class="col-sm-8">@Model.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</dd>
+            @if (Model.FechaRespuesta.HasValue)
+            {
+                <dt class="col-sm-4">Respondida el</dt><dd class="col-sm-8">@Model.FechaRespuesta.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+            }
+            @if (!string.IsNullOrEmpty(Model.MotivoRechazo))
+            {
+                <dt class="col-sm-4">Motivo de rechazo</dt><dd class="col-sm-8 text-danger">@Model.MotivoRechazo</dd>
+            }
+            @if (Model.FechaDevolucion.HasValue)
+            {
+                <dt class="col-sm-4">Devuelto el</dt>
+                <dd class="col-sm-8">
+                    @Model.FechaDevolucion.Value.ToString("dd/MM/yyyy HH:mm")
+                    @if (Model.DevueltaConRetraso)
+                    {
+                        <span class="badge bg-danger ms-1">Con retraso</span>
+                    }
+                </dd>
+            }
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        @if (esEncargado)
+        {
+            <a asp-action="Historial" class="btn btn-outline-secondary">Volver al historial</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="btn btn-outline-secondary">Volver a mis reservas</a>
+        }
+    </div>
+</div>

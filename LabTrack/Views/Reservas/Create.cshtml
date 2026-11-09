@@ -1,0 +1,55 @@
+@model ReservaCrearViewModel
+@{
+    ViewData["Title"] = "Nueva reserva";
+    var equipos = (SelectList)ViewBag.Equipos;
+}
+@using Microsoft.AspNetCore.Mvc.Rendering
+<h1 class="h3 mb-3">Solicitar reserva de equipo</h1>
+<div class="card shadow-sm" style="max-width: 720px;">
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert" id="errores-reserva"></div>
+
+        @if (!equipos.Any())
+        {
+            <div class="alert alert-info">No hay equipos disponibles para reservar en este momento.</div>
+        }
+
+        <form asp-action="Create" method="post" id="form-reserva">
+            <div class="mb-3">
+                <label asp-for="EquipoId" class="form-label"></label>
+                <select asp-for="EquipoId" asp-items="equipos" class="form-select" id="equipo">
+                    <option value="0">-- Seleccione un equipo disponible --</option>
+                </select>
+                <span asp-validation-for="EquipoId" class="text-danger small"></span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="Fecha" class="form-label"></label>
+                    <input asp-for="Fecha" class="form-control" id="fecha" asp-format="{0:yyyy-MM-dd}" />
+                    <span asp-validation-for="Fecha" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="HoraInicio" class="form-label"></label>
+                    <input asp-for="HoraInicio" type="time" class="form-control" id="hora-inicio" asp-format="{0:hh\:mm}" />
+                    <span asp-validation-for="HoraInicio" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="HoraFin" class="form-label"></label>
+                    <input asp-for="HoraFin" type="time" class="form-control" id="hora-fin" asp-format="{0:hh\:mm}" />
+                    <span asp-validation-for="HoraFin" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="form-text mt-2">
+                La solicitud quedará <strong>Pendiente</strong> hasta que el encargado de laboratorio la apruebe.
+                No puede tener más de un equipo reservado en el mismo horario.
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary" id="btn-reservar">Solicitar reserva</button>
+                <a asp-controller="Equipos" asp-action="Index" class="btn btn-outline-secondary">Volver al catálogo</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

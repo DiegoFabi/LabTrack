@@ -1,0 +1,31 @@
+@model Categoria
+@{
+    ViewData["Title"] = "Eliminar categoría";
+}
+<h1 class="h3 mb-3">Eliminar categoría</h1>
+@if (Model.Equipos.Any())
+{
+    <div class="alert alert-danger">Esta categoría tiene @Model.Equipos.Count equipo(s) asociado(s) y no puede eliminarse.</div>
+}
+else
+{
+    <div class="alert alert-warning">¿Está seguro de eliminar esta categoría?</div>
+}
+<div class="card shadow-sm" style="max-width: 640px;">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Nombre</dt><dd class="col-sm-8">@Model.Nombre</dd>
+            <dt class="col-sm-4">Descripción</dt><dd class="col-sm-8">@(Model.Descripcion ?? "-")</dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        @if (!Model.Equipos.Any())
+        {
+            <form asp-action="Delete" method="post" class="d-inline">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger" id="btn-confirmar-eliminar">Eliminar</button>
+            </form>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+    </div>
+</div>

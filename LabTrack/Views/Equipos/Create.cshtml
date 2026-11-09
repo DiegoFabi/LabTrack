@@ -1,0 +1,19 @@
+@model Equipo
+@{
+    ViewData["Title"] = "Nuevo equipo";
+}
+<h1 class="h3 mb-3">Nuevo equipo</h1>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post" id="form-equipo">
+            <partial name="_Formulario" model="Model" />
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

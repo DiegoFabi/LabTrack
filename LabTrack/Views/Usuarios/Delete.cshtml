@@ -1,0 +1,22 @@
+@model Usuario
+@{
+    ViewData["Title"] = "Eliminar usuario";
+}
+<h1 class="h3 mb-3">Eliminar usuario</h1>
+<div class="alert alert-warning">¿Está seguro de eliminar este usuario? Solo se pueden eliminar usuarios sin reservas registradas.</div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Código</dt><dd class="col-sm-9">@Model.Codigo</dd>
+            <dt class="col-sm-3">Nombre</dt><dd class="col-sm-9">@Model.NombreCompleto</dd>
+            <dt class="col-sm-3">Rol</dt><dd class="col-sm-9">@Model.Rol</dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        <form asp-action="Delete" method="post" class="d-inline">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger" id="btn-confirmar-eliminar">Eliminar</button>
+        </form>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</div>

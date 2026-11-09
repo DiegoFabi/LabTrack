@@ -1,0 +1,82 @@
+@model PanelEstudianteViewModel
+@{
+    ViewData["Title"] = "Mi panel";
+}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="h3 mb-0">Hola, @Model.Usuario.NombreCompleto</h1>
+        <span class="text-muted">Código: @Model.Usuario.Codigo</span>
+    </div>
+    <a asp-controller="Reservas" asp-action="Create" class="btn btn-primary" id="btn-nueva-reserva">+ Nueva reserva</a>
+</div>
+
+@if (Model.Usuario.Estado == EstadoUsuario.Penalizado)
+{
+    <div class="alert alert-danger" id="alerta-penalizado">
+        Su cuenta se encuentra <strong>Penalizada</strong> por devolución tardía de un equipo. No podrá registrar nuevas reservas
+        hasta que el encargado de laboratorio retire la penalización.
+    </div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Estado de mi cuenta</div>
+                <div class="mt-2"><span id="estado-estudiante" class="badge fs-6 @Model.Usuario.Estado.CssBadge()">@Model.Usuario.Estado</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Reservas activas</div>
+                <div class="valor">@Model.ReservasActivas.Count</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-stat shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Equipos disponibles</div>
+                <div class="valor">@Model.EquiposDisponibles</div>
+                <a asp-controller="Equipos" asp-action="Index" class="small">Ver catálogo</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white fw-semibold">Mis préstamos activos y pendientes</div>
+    <div class="card-body p-0">
+        @if (!Model.ReservasActivas.Any())
+        {
+            <p class="text-muted p-3 mb-0">No tiene reservas activas.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr><th>Equipo</th><th>Categoría</th><th>Fecha</th><th>Horario</th><th>Estado</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.ReservasActivas)
+                        {
+                            <tr>
+                                <td>@r.Equipo!.CodigoInventario - @r.Equipo.Nombre</td>
+                                <td>@r.Equipo.Categoria?.Nombre</td>
+                                <td>@r.Inicio.ToString("dd/MM/yyyy")</td>
+                                <td>@r.Inicio.ToString("HH:mm") - @r.Fin.ToString("HH:mm")</td>
+                                <td><partial name="_EstadoReserva" model="r.Estado" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="card-footer bg-white text-end">
+        <a asp-controller="Reservas" asp-action="Index">Ver todas mis reservas &rarr;</a>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+@model Equipo
+@{
+    ViewData["Title"] = "Eliminar equipo";
+}
+<h1 class="h3 mb-3">Eliminar equipo</h1>
+<div class="alert alert-warning">¿Está seguro de eliminar este equipo? Esta acción no se puede deshacer.</div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Código de inventario</dt><dd class="col-sm-9">@Model.CodigoInventario</dd>
+            <dt class="col-sm-3">Nombre</dt><dd class="col-sm-9">@Model.Nombre</dd>
+            <dt class="col-sm-3">Categoría</dt><dd class="col-sm-9">@Model.Categoria?.Nombre</dd>
+            <dt class="col-sm-3">Estado</dt><dd class="col-sm-9"><partial name="_EstadoEquipo" model="Model.Estado" /></dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        <form asp-action="Delete" method="post" class="d-inline">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger" id="btn-confirmar-eliminar">Eliminar</button>
+        </form>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</div>

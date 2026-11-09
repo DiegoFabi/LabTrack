@@ -1,0 +1,48 @@
+@model Usuario
+@{
+    ViewData["Title"] = Model.NombreCompleto;
+    var ahora = (DateTime)ViewBag.Ahora;
+}
+<h1 class="h3 mb-3">@Model.NombreCompleto</h1>
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Código</dt><dd class="col-sm-9">@Model.Codigo</dd>
+            <dt class="col-sm-3">Correo</dt><dd class="col-sm-9">@(Model.Email ?? "-")</dd>
+            <dt class="col-sm-3">Rol</dt><dd class="col-sm-9">@Model.Rol</dd>
+            <dt class="col-sm-3">Estado</dt><dd class="col-sm-9"><span class="badge @Model.Estado.CssBadge()">@Model.Estado</span></dd>
+            <dt class="col-sm-3">Acceso</dt>
+            <dd class="col-sm-9">@(Model.EstaBloqueado(ahora) ? $"Bloqueado hasta {Model.BloqueadoHasta:dd/MM/yyyy HH:mm}" : "Normal")</dd>
+            <dt class="col-sm-3">Fecha de registro</dt><dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+    </div>
+</div>
+
+@if (Model.Rol == RolUsuario.Estudiante)
+{
+    <div class="card shadow-sm mb-3">
+        <div class="card-header bg-white fw-semibold">Reservas del estudiante</div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead class="table-light"><tr><th>Equipo</th><th>Fecha/Hora</th><th>Estado</th><th>Retraso</th></tr></thead>
+                <tbody>
+                    @foreach (var r in Model.Reservas.OrderByDescending(r => r.FechaSolicitud))
+                    {
+                        <tr>
+                            <td>@r.Equipo?.Nombre</td>
+                            <td>@r.Inicio.ToString("dd/MM/yyyy HH:mm") - @r.Fin.ToString("HH:mm")</td>
+                            <td><partial name="_EstadoReserva" model="r.Estado" /></td>
+                            <td>@(r.DevueltaConRetraso ? "Sí" : "-")</td>
+                        </tr>
+                    }
+                    @if (!Model.Reservas.Any())
+                    {
+                        <tr><td colspan="4" class="text-muted">Sin reservas.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Editar</a>
+<a asp-action="Index" class="btn btn-outline-secondary">Volver</a>

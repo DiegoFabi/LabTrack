@@ -1,0 +1,20 @@
+@model Equipo
+@{
+    ViewData["Title"] = "Editar equipo";
+}
+<h1 class="h3 mb-3">Editar equipo</h1>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Edit" method="post" id="form-equipo">
+            <input type="hidden" asp-for="Id" />
+            <partial name="_Formulario" model="Model" />
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar cambios</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,34 @@
+@model Equipo
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+<div class="row g-3">
+    <div class="col-md-4">
+        <label asp-for="CodigoInventario" class="form-label"></label>
+        <input asp-for="CodigoInventario" class="form-control" placeholder="Ej. CMP-010" />
+        <span asp-validation-for="CodigoInventario" class="text-danger small"></span>
+    </div>
+    <div class="col-md-8">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="CategoriaId" class="form-label"></label>
+        <select asp-for="CategoriaId" asp-items="ViewBag.Categorias" class="form-select">
+            <option value="0">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="CategoriaId" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Estado" class="form-label"></label>
+        <select asp-for="Estado" asp-items="Html.GetEnumSelectList<EstadoEquipo>()" class="form-select"></select>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Ubicacion" class="form-label"></label>
+        <input asp-for="Ubicacion" class="form-control" placeholder="Ej. Lab. A-101" />
+    </div>
+    <div class="col-12">
+        <label asp-for="Descripcion" class="form-label"></label>
+        <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger small"></span>
+    </div>
+</div>

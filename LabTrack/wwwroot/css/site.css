@@ -1,0 +1,44 @@
+html {
+  font-size: 15px;
+  position: relative;
+}
+
+body {
+  background-color: #f4f6fa;
+}
+
+.bg-labtrack {
+  background: linear-gradient(90deg, #12355b 0%, #1f5f8b 100%);
+}
+
+.brand-icon {
+  font-size: 1.2rem;
+}
+
+.card-stat {
+  border: 0;
+  border-left: 4px solid #1f5f8b;
+}
+
+.card-stat .valor {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.login-wrapper {
+  max-width: 420px;
+  margin: 4rem auto;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.btn:focus,
+.btn:active:focus,
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.15rem rgba(31, 95, 139, 0.35);
+}

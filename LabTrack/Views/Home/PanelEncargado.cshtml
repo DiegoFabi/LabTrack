@@ -1,0 +1,78 @@
+@model PanelEncargadoViewModel
+@{
+    ViewData["Title"] = "Panel del encargado";
+}
+<h1 class="h3 mb-4">Panel del encargado de laboratorio</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <a class="text-decoration-none text-reset" asp-controller="Reservas" asp-action="Pendientes">
+            <div class="card card-stat shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small">Solicitudes pendientes</div>
+                <div class="valor" id="total-pendientes">@Model.ReservasPendientes</div>
+            </div></div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a class="text-decoration-none text-reset" asp-controller="Reservas" asp-action="Activas">
+            <div class="card card-stat shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small">Préstamos activos</div>
+                <div class="valor">@Model.PrestamosActivos</div>
+                @if (Model.PrestamosVencidos > 0)
+                {
+                    <span class="badge bg-danger">@Model.PrestamosVencidos vencido(s)</span>
+                }
+            </div></div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="card card-stat shadow-sm h-100"><div class="card-body">
+            <div class="text-muted small">Equipos (total)</div>
+            <div class="valor">@Model.TotalEquipos</div>
+            <div class="small">
+                <span class="text-success">@Model.EquiposDisponibles disp.</span> ·
+                <span class="text-warning">@Model.EquiposPrestados prest.</span> ·
+                <span class="text-secondary">@Model.EquiposMantenimiento mant.</span>
+            </div>
+        </div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a class="text-decoration-none text-reset" asp-controller="Usuarios" asp-action="Index">
+            <div class="card card-stat shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small">Estudiantes penalizados</div>
+                <div class="valor">@Model.EstudiantesPenalizados</div>
+            </div></div>
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white fw-semibold">Últimas solicitudes</div>
+    <div class="card-body p-0">
+        @if (!Model.UltimasSolicitudes.Any())
+        {
+            <p class="text-muted p-3 mb-0">Aún no hay solicitudes registradas.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr><th>Estudiante</th><th>Equipo</th><th>Fecha/Hora</th><th>Estado</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.UltimasSolicitudes)
+                        {
+                            <tr>
+                                <td>@r.Usuario!.NombreCompleto</td>
+                                <td>@r.Equipo!.Nombre</td>
+                                <td>@r.Inicio.ToString("dd/MM/yyyy HH:mm") - @r.Fin.ToString("HH:mm")</td>
+                                <td><partial name="_EstadoReserva" model="r.Estado" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

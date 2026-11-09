@@ -1,0 +1,20 @@
+@model UsuarioFormViewModel
+@{
+    ViewData["Title"] = "Editar usuario";
+}
+<h1 class="h3 mb-3">Editar usuario</h1>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Edit" method="post" id="form-usuario">
+            <input type="hidden" asp-for="Id" />
+            <partial name="_Formulario" model="Model" />
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar cambios</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

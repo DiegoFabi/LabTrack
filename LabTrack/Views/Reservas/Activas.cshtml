@@ -1,0 +1,59 @@
+@model IEnumerable<Reserva>
+@{
+    ViewData["Title"] = "Préstamos activos";
+    var ahora = (DateTime)ViewBag.Ahora;
+}
+<h1 class="h3 mb-3">Préstamos activos (devoluciones)</h1>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-sm-8 col-md-6">
+        <input type="search" name="busqueda" value="@ViewBag.Busqueda" class="form-control" id="busqueda-reserva"
+               placeholder="Buscar por estudiante, código, equipo o código de inventario" />
+    </div>
+    <div class="col-auto"><button type="submit" class="btn btn-outline-secondary" id="btn-buscar-reserva">Buscar</button></div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info" id="mensaje-sin-activas">No hay préstamos activos.</div>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="tabla-activas">
+                <thead class="table-light">
+                    <tr><th>Estudiante</th><th>Equipo</th><th>Fecha</th><th>Horario</th><th>Situación</th><th class="text-end">Acción</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        var vencido = ahora > r.Fin;
+                        <tr data-reserva-id="@r.Id" class="@(vencido ? "table-danger" : "")">
+                            <td>@r.Usuario!.NombreCompleto<div class="small text-muted">@r.Usuario.Codigo</div></td>
+                            <td>@r.Equipo!.Nombre<div class="small text-muted">@r.Equipo.CodigoInventario</div></td>
+                            <td>@r.Inicio.ToString("dd/MM/yyyy")</td>
+                            <td>@r.Inicio.ToString("HH:mm") - @r.Fin.ToString("HH:mm")</td>
+                            <td>
+                                @if (vencido)
+                                {
+                                    <span class="badge bg-danger">Vencido</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">En plazo</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <form asp-action="MarcarDevolucion" asp-route-id="@r.Id" method="post" class="d-inline"
+                                      data-confirmar="@(vencido ? "La devolución está fuera de plazo; el estudiante será penalizado. ¿Continuar?" : "¿Confirmar la devolución del equipo?")">
+                                    <button type="submit" class="btn btn-sm btn-primary btn-devolucion">Marcar Devolución</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
